@@ -143,3 +143,92 @@ Sao Paulo       |  -23.5478 |  -46.6358
 
 The ^ means right-aligned when outputting. If the width is less than the actual width of the string, the actual width will be output
 
+# Example 2-18 Bisect bisect
+
+get the index of the sequence
+
+```python
+def grade(score, breakpoints=[60, 70, 80, 90], grades='FDCBA'):
+    i = bisect.bisect(breakpoints, score)
+    return grades[i]
+
+print([grade(score) for score in [33, 99, 77, 70, 89, 90, 100]])
+```
+
+# Example 2-19 Insort keeps a sorted sequence always sorted
+
+```
+import bisect
+import random
+SIZE=7
+random.seed(1729)
+my_list = []
+for i in range(SIZE):
+ new_item = random.randrange(SIZE*2)
+ bisect.insort(my_list, new_item)
+ print('%2d ->' % new_item, my_list)
+ [0,2,6,7,8,10,10]
+```
+
+
+
+# MemoryView
+
+## Example 2-21  Changing the value of an array item by poking one of its bytes
+
+*A memoryview is essentially a generalized NumPy array structure in Python itself (without the math). It allows you to share memory between data-structures (things like PIL images, SQLlite databases, NumPy arrays, etc.) without first copying. This is very important for large data sets.*
+
+```python
+>>> numbers = array.array('h', [-2, -1, 0, 1, 2])
+>>> memv = memoryview(numbers) ➊
+>>> len(memv)
+5
+>>> memv[0] ➋
+-2
+>>> memv_oct = memv.cast('B') ➌
+>>> memv_oct.tolist() ➍
+[254, 255, 255, 255, 0, 0, 1, 0, 2, 0]
+>>> memv_oct[5] = 4 ➎
+>>> numbers
+array('h', [-2, -1, 1024, 1, 2]) 
+```
+
+# numpy
+
+a.transpose 转置
+
+# Deque
+
+## Example 2-23
+
+```python
+>>> from collections import deque
+>>> dq = deque(range(10), maxlen=10) ➊
+>>> dq
+deque([0, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+>>> dq.rotate(3) ➋
+>>> dq
+deque([7, 8, 9, 0, 1, 2, 3, 4, 5, 6], maxlen=10)
+>>> dq.rotate(-4)
+>>> dq
+deque([1, 2, 3, 4, 5, 6, 7, 8, 9, 0], maxlen=10)
+>>> dq.appendleft(-1) ➌
+>>> dq
+deque([-1, 1, 2, 3, 4, 5, 6, 7, 8, 9], maxlen=10)
+>>> dq.extend([11, 22, 33]) ➍
+>>> dq
+deque([3, 4, 5, 6, 7, 8, 9, 11, 22, 33], maxlen=10)
+>>> dq.extendleft([10, 20, 30, 40]) ➎
+>>> dq
+deque([40, 30, 20, 10, 3, 4, 5, 6, 7, 8], maxlen=10)
+```
+
+➊ maxlen 是一个可选参数，代表这个队列可以容纳的元素的数量，而且一旦设定，这个 属性就不能修改了。
+
+ ➋ 队列的旋转操作接受一个参数 n，当 n > 0 时，队列的最右边的 n 个元素会被移动到队 列的左边。当 n < 0 时，最左边的 n 个元素会被移动到右边。
+
+ ➌ 当试图对一个已满（len(d) == d.maxlen）的队列做尾部添加操作的时候，它头部的元 素会被删除掉。注意在下一行里，元素 0 被删除了。
+
+ ➍ 在尾部添加 3 个元素的操作会挤掉 -1、1 和 2。 
+
+➎ extendleft(iter) 方法会把迭代器里的元素逐个添加到双向队列的左边，因此迭代器里 的元素会逆序出现在队列里。
